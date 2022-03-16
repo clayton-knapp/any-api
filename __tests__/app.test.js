@@ -40,17 +40,48 @@ describe('AnyAPI routes', () => {
   });
 
 
-  // it('gets a single of cat', async () => {
-  //   const expected = await Cat.fetchById(id);
+  it('gets a single of cat', async () => {
+    const expected = await Cat.fetchById(1);
     
-  //   const res = await request(app) //what is request(app)
-  //     .get('/api/v1/cats');
+    const res = await request(app) //what is request(app)
+      .get(`/api/v1/cats/${expected.id}`);
     
-  //   expect(res.body).toEqual(expected);
+    expect(res.body).toEqual(expected);
+  });
+
+  // it('returns a 404 if cat not found', async() => {
+  //   const res = await request(app)
+  //     .get('/api/v1/cats/dont-exist');
+
+  //   expect (res.status).toEqual(404);
+
   // });
 
 
+  it('deletes a cat by id', async() => {
+    const expected = await Cat.fetchById(1);
+    const res = await request(app)
+      .delete(`/api/v1/cats/${expected.id}`);
 
+    expect(res.body).toEqual(expected);
+  });
+
+
+  it('updates a cat by ID', async () => {
+    const expected = {
+      id: expect.any(String),
+      name: 'OLD Sterling',
+      owner: 'Clayton',
+      age: 14,
+      favoriteToy: 'feather',
+    };
+    
+    const res = await request(app) 
+      .patch('/api/v1/cats/1')
+      .send({ name: 'OLD Sterling' });
+    
+    expect(res.body).toEqual(expected);
+  });
 
 
 
